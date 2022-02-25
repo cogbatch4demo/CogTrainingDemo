@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">CogTrainingDemo</string>
+    <string name="episode_name">Episode %s</string>
+    <string name="back_to_characters_list">Back to Characters List</string>
+    <string name="episode_number">episode number</string>
+    <string name="title_name">title name</string>
+    <string name="series_name">series name</string>
+    <string name="character_list">character list</string>
 </resources>

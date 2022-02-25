@@ -1,22 +1,28 @@
 package com.example.cogtrainingdemo
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cogtrainingdemo.data.api.CharactersRemoteDataSource
 import com.example.cogtrainingdemo.data.api.RestApi
+import com.example.cogtrainingdemo.data.model.CharactersItem
 import com.example.cogtrainingdemo.data.repository.CharactersRepository
 import com.example.cogtrainingdemo.databinding.ActivityMainBinding
+import com.example.cogtrainingdemo.ui.listener.CallbackListener
 import com.example.cogtrainingdemo.ui.main.CharactersAdapter
 import com.example.cogtrainingdemo.ui.main.intent.MainIntent
 import com.example.cogtrainingdemo.ui.main.viewState.MainState
 import com.example.cogtrainingdemo.ui.viewModel.CharactersViewModel
+import com.example.cogtrainingdemo.ui.views.EpisodeListFragment
+import com.example.cogtrainingdemo.ui.views.EposideListFragment_TAG
+import com.example.cogtrainingdemo.ui.views.ViewBase
 import kotlinx.coroutines.launch
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ViewBase, CallbackListener {
     private lateinit var binding: ActivityMainBinding
     private val viewModel by viewModels<CharactersViewModel>()
 
@@ -27,19 +33,42 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-        repository = CharactersRepository(service)
+        repository = CharactersRepository.getInstance(service)
         setContentView(binding.root)
         setUpAdapter()
         initViewModel()
         observeViewModelStates()
         sendUserIntent()
+
+        binding.episodeBtn.setOnClickListener {
+            showEpisodesList()
+        }
     }
 
     private fun setUpAdapter() {
+        adapter.registerCallbackListener(this)
         binding.recyclerview.adapter = adapter
         binding.recyclerview.layoutManager = LinearLayoutManager(this)
     }
 
+    private fun showEpisodesList(characterName: String? = null) {
+        binding.placeHolder.visibility = View.VISIBLE
+        binding.mainLayout.visibility = View.GONE
+        val episodesFragment = EpisodeListFragment.newInstance(characterName, this)
+        val fragmentTransaction = supportFragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.placeHolder, episodesFragment, EposideListFragment_TAG)
+            .commit()
+    }
+
+    private fun showCharacterList() {
+        supportFragmentManager.findFragmentByTag(EposideListFragment_TAG)?.let {
+            supportFragmentManager.beginTransaction().remove(
+                it
+            )
+        }
+        binding.placeHolder.visibility = View.GONE
+        binding.mainLayout.visibility = View.VISIBLE
+    }
 
     private fun initViewModel() {
         viewModel.init(this, repository)
@@ -51,7 +80,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun observeViewModelStates() {
+    override fun observeViewModelStates() {
         lifecycleScope.launch {
             viewModel.charactersState.collect { state ->
 
@@ -76,5 +105,18 @@ class MainActivity : AppCompatActivity() {
 
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        adapter.unRegisterCallbackListener()
+    }
+
+    override fun onBackPress() {
+        showCharacterList()
+    }
+
+    override fun clickOnItem(item: Any?) {
+        if (item is CharactersItem) showEpisodesList(item.name)
     }
 }

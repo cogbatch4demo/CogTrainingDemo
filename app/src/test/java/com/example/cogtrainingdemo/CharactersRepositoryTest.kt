@@ -37,7 +37,7 @@ class CharactersRepositoryTest {
         MockKAnnotations.init(this, relaxUnitFun = true)
         Dispatchers.setMain(testDispatcher)
 
-        SUT = CharactersRepository(charactersRemoteDataSource)
+        SUT = CharactersRepository.getInstance(charactersRemoteDataSource)
     }
 
     @ExperimentalCoroutinesApi

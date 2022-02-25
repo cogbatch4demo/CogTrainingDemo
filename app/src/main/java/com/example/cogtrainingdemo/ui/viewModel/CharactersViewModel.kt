@@ -14,28 +14,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
 
-class CharactersViewModel : ViewModel() {
-    private lateinit var repository: CharactersRepository
-
-    val userIntent = Channel<MainIntent>(Channel.UNLIMITED)
-
+class CharactersViewModel : ViewModelBase() {
     private val _charactersState = MutableStateFlow<MainState>(MainState.Idle)
     val charactersState: StateFlow<MainState> = _charactersState
 
     fun init(context: Context, repository: CharactersRepository) {
         this.repository = repository
         handleIntent(context)
-    }
-
-    private fun handleIntent(context: Context) {
-        viewModelScope.launch {
-            userIntent.consumeAsFlow().collect {
-                when (it) {
-                    is MainIntent.FetchUser -> fetchCharacters(context)
-                }
-
-            }
-        }
     }
 
     private fun fetchCharacters(context: Context) {
@@ -56,6 +41,17 @@ class CharactersViewModel : ViewModel() {
                     MainState.Characters(requireNotNull(responseData.data))
                 } catch (e: Exception) {
                     MainState.Error(e.localizedMessage)
+                }
+
+            }
+        }
+    }
+
+    override fun handleIntent(context: Context) {
+        viewModelScope.launch {
+            userIntent.consumeAsFlow().collect {
+                when (it) {
+                    is MainIntent.FetchUser -> fetchCharacters(context)
                 }
 
             }
