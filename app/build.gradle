@@ -46,6 +46,7 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$appCompatVersion"
     implementation "com.google.android.material:material:$materialVersion"
     implementation "androidx.constraintlayout:constraintlayout:$constraintlayoutVersion"
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation "org.junit.jupiter:junit-jupiter:$junitJupiterVersion"
 
     testImplementation 'org.testng:testng:6.9.6'
