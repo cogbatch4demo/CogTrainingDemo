@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.cogtrainingdemo.R
 import com.example.cogtrainingdemo.data.model.CharactersItem
 import com.example.cogtrainingdemo.databinding.ItemListBinding
 import com.example.cogtrainingdemo.ui.listener.CallbackListener

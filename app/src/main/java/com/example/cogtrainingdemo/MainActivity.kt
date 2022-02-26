@@ -2,6 +2,8 @@ package com.example.cogtrainingdemo
 
 import android.os.Bundle
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -86,14 +88,15 @@ class MainActivity : AppCompatActivity(), ViewBase, CallbackListener {
 
                 when (state) {
                     is MainState.Idle -> {
-//                        binding.progressBar.visibility = View.GONE
+                        binding.progressBar.visibility = GONE
                     }
                     is MainState.Loading -> {
-//                        binding.progressBar.visibility = View.VISIBLE
+                        binding.progressBar.visibility = VISIBLE
+                        binding.recyclerview.visibility = GONE
                     }
                     is MainState.Characters -> {
-//                        binding.progressBar.visibility = View.GONE
-//                        binding.recyclerview.visibility = View.VISIBLE
+                        binding.progressBar.visibility = GONE
+                        binding.recyclerview.visibility = VISIBLE
                         adapter.updateCharacters(state.data)
                     }
                     is MainState.Error -> {
