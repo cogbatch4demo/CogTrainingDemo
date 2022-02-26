@@ -16,7 +16,6 @@ class Converters {
     @TypeConverter
     fun fromArrayList(list: ArrayList<String?>?): String? {
         val gson = Gson()
-        println("Huong gson.toJson(list) = ${gson.toJson(list)}")
         return gson.toJson(list)
     }
 

@@ -1,5 +1,6 @@
 package com.example.cogtrainingdemo.ui.views
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cogtrainingdemo.R
 import com.example.cogtrainingdemo.data.api.CharactersRemoteDataSource
 import com.example.cogtrainingdemo.data.api.RestApi
+import com.example.cogtrainingdemo.data.model.EpisodesItem
 import com.example.cogtrainingdemo.data.repository.CharactersRepository
 import com.example.cogtrainingdemo.databinding.FragmentEposideListListBinding
 import com.example.cogtrainingdemo.ui.listener.CallbackListener
@@ -27,11 +29,12 @@ import kotlinx.coroutines.launch
  */
 const val EposideListFragment_TAG = "EposideListFragment"
 
-class EpisodeListFragment(private val callbackListener: CallbackListener) : Fragment(), ViewBase {
+class EpisodeListFragment(private val callbackListener: CallbackListener) : Fragment(), ViewBase,
+    CallbackListener {
 
     private lateinit var binding: FragmentEposideListListBinding
     private var characterName: String? = null
-    private val viewModel by viewModels<EpisodesViewModel>()
+    override val viewModel by viewModels<EpisodesViewModel>()
     private val service: CharactersRemoteDataSource = RestApi.getRetrofitInstance()
     lateinit var repository: CharactersRepository
     private var episodesAdapter = EpisodeItemRecyclerViewAdapter(
@@ -60,9 +63,11 @@ class EpisodeListFragment(private val callbackListener: CallbackListener) : Frag
         binding.backBtn.setOnClickListener {
             callbackListener.onBackPress()
         }
+        episodesAdapter.registerCallbackListener(this)
         // Set the adapter
         with(binding.recyclerviewEpisodes) {
             LinearLayoutManager(context)
+
             adapter = episodesAdapter
             val mDividerItemDecoration = DividerItemDecoration(
                 this.context,
@@ -122,5 +127,22 @@ class EpisodeListFragment(private val callbackListener: CallbackListener) : Frag
 
             }
         }
+    }
+
+    override fun onBackPress() {
+
+    }
+
+    override fun clickOnItem(item: Any?) {
+        if (item is EpisodesItem) {
+            val intent = Intent(requireContext(), EpisodeDetailActivity::class.java)
+            intent.putExtra(EpisodeDetailActivity.DATA_CONTENT, item)
+            startActivity(intent)
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        episodesAdapter.unRegisterCallbackListener()
     }
 }

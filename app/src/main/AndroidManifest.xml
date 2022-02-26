@@ -12,6 +12,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CogTrainingDemo">
         <activity
+            android:name=".ui.views.EpisodeDetailActivity"
+            android:exported="false"
+            android:label="@string/title_activity_episode_detail"
+            android:theme="@style/Theme.CogTrainingDemo.NoActionBar" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
