@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.cogtrainingdemo.R
 import com.example.cogtrainingdemo.data.model.EpisodesItem
 import com.example.cogtrainingdemo.databinding.FragmentEposideListBinding
+import com.example.cogtrainingdemo.ui.listener.CallbackListener
 
 /**
  * [RecyclerView.Adapter] that can display a [PlaceholderItem].
@@ -15,6 +16,9 @@ import com.example.cogtrainingdemo.databinding.FragmentEposideListBinding
 class EpisodeItemRecyclerViewAdapter(
     private var values: List<EpisodesItem>
 ) : RecyclerView.Adapter<EpisodeItemRecyclerViewAdapter.ViewHolder>() {
+
+
+    private var callbackListener: CallbackListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
@@ -27,11 +31,23 @@ class EpisodeItemRecyclerViewAdapter(
         )
 
     }
+    
+    fun registerCallbackListener(callbackListener: CallbackListener) {
+        this.callbackListener = callbackListener
+    }
+
+    fun unRegisterCallbackListener() {
+        this.callbackListener = null
+    }
+
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
         val stringEpisode = holder.characterList.context.resources.getString(R.string.episode_name)
 
+        holder.itemView.setOnClickListener{
+            callbackListener?.clickOnItem(item)
+        }
         holder.characterList.text = item.characters.toString()
         holder.episode.text = String.format(stringEpisode, item.episode_id.toString())
         holder.titleName.text = item.title

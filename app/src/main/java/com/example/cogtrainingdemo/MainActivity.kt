@@ -22,9 +22,10 @@ import com.example.cogtrainingdemo.ui.views.EposideListFragment_TAG
 import com.example.cogtrainingdemo.ui.views.ViewBase
 import kotlinx.coroutines.launch
 
+
 class MainActivity : AppCompatActivity(), ViewBase, CallbackListener {
     private lateinit var binding: ActivityMainBinding
-    private val viewModel by viewModels<CharactersViewModel>()
+    override val viewModel by viewModels<CharactersViewModel>()
 
     private val service: CharactersRemoteDataSource = RestApi.getRetrofitInstance()
     lateinit var repository: CharactersRepository
