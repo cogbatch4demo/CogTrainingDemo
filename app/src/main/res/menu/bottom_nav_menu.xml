@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/characterTab"
+        android:title="@string/characters_tab_label"
+        android:icon="@drawable/ic_character_foreground"/>
+    <item
+        android:id="@+id/episodeTab"
+        android:title="@string/episodes_tab_label"
+        android:icon="@drawable/ic_eposide_foreground"/>
+</menu>

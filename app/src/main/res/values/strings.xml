@@ -21,4 +21,6 @@
     <string name="air_date">Air date:</string>
     <string name="characters">Characters:</string>
     <string name="episode">Episode:</string>
+    <string name="characters_tab_label">Characters</string>
+    <string name="episodes_tab_label">Episodes</string>
 </resources>

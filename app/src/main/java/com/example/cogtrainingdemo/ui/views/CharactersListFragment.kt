@@ -1,6 +1,5 @@
 package com.example.cogtrainingdemo.ui.views
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,47 +8,39 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.cogtrainingdemo.R
 import com.example.cogtrainingdemo.data.api.CharactersRemoteDataSource
 import com.example.cogtrainingdemo.data.api.RestApi
-import com.example.cogtrainingdemo.data.model.EpisodesItem
+import com.example.cogtrainingdemo.data.model.CharactersItem
 import com.example.cogtrainingdemo.data.repository.CharactersRepository
-import com.example.cogtrainingdemo.databinding.FragmentEposideListListBinding
+import com.example.cogtrainingdemo.databinding.FragmentCharactersListListBinding
 import com.example.cogtrainingdemo.ui.listener.CallbackListener
+import com.example.cogtrainingdemo.ui.main.CharactersAdapter
 import com.example.cogtrainingdemo.ui.main.intent.MainIntent
 import com.example.cogtrainingdemo.ui.main.viewState.MainState
-import com.example.cogtrainingdemo.ui.viewModel.EpisodesViewModel
+import com.example.cogtrainingdemo.ui.viewModel.CharactersViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-
 
 /**
  * A fragment representing a list of Items.
  */
-const val EposideListFragment_TAG = "EposideListFragment"
+const val CharactersListFragment_TAG = "CharactersListFragment"
 
-class EpisodeListFragment : Fragment(), ViewBase,
+class CharactersListFragment : Fragment(), ViewBase,
     CallbackListener {
 
-    private lateinit var binding: FragmentEposideListListBinding
-    private var characterName: String? = null
-    override val viewModel by viewModels<EpisodesViewModel>()
+
+    private lateinit var binding: FragmentCharactersListListBinding
+    override val viewModel by viewModels<CharactersViewModel>()
     private val service: CharactersRemoteDataSource = RestApi.getRetrofitInstance()
     lateinit var repository: CharactersRepository
-    private var episodesAdapter = EpisodeItemRecyclerViewAdapter(
-        listOf()
-    )
+    private var charactersAdapter = CharactersAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         repository = CharactersRepository.getInstance(service)
         viewModel.init(requireContext(), repository)
-
-        arguments?.let {
-            characterName = it.getString(CHARACTER_NAME, "").uppercase()
-        }
         observeViewModelStates()
     }
 
@@ -59,20 +50,13 @@ class EpisodeListFragment : Fragment(), ViewBase,
     ): View {
 
         // val layout = inflater.inflate(R.layout.fragment_eposide_list_list, container, false)
-        binding = FragmentEposideListListBinding.inflate(inflater)
-        episodesAdapter.registerCallbackListener(this)
-        // Set the adapter
-        with(binding.recyclerviewEpisodes) {
-            LinearLayoutManager(context)
+        binding = FragmentCharactersListListBinding.inflate(inflater)
 
-            adapter = episodesAdapter
-            val mDividerItemDecoration = DividerItemDecoration(
-                this.context,
-                DividerItemDecoration.VERTICAL
-            )
-            this.context.resources.getDrawable(R.drawable.divider)
-                ?.let { mDividerItemDecoration.setDrawable(it) }
-            addItemDecoration(mDividerItemDecoration)
+        charactersAdapter.registerCallbackListener(this)
+        // Set the adapter
+        with(binding.recyclerview) {
+            LinearLayoutManager(context)
+            adapter = charactersAdapter
             sendUserIntent()
         }
         return binding.root
@@ -80,39 +64,25 @@ class EpisodeListFragment : Fragment(), ViewBase,
 
     private fun sendUserIntent() {
         lifecycleScope.launch {
-            if (characterName.isNullOrBlank())
-                viewModel.userIntent.send(MainIntent.FetchEpisodes)
-            else
-                viewModel.userIntent.send(MainIntent.GetEpisodesWithCharacter(characterName))
+            viewModel.userIntent.send(MainIntent.FetchUser)
         }
-    }
-
-    companion object {
-        const val CHARACTER_NAME = "character_name"
-
-        @JvmStatic
-        fun newInstance(characterName: String?) =
-            EpisodeListFragment().apply {
-                arguments = Bundle().apply {
-                    putString(CHARACTER_NAME, characterName)
-                }
-            }
     }
 
     override fun observeViewModelStates() {
         lifecycleScope.launch(Dispatchers.Main) {
-            viewModel.eposidesState.collect { state ->
+            viewModel.charactersState.collect { state ->
                 when (state) {
                     is MainState.Idle -> {
                     }
                     is MainState.Loading -> {
                         binding.progressbar.visibility = View.VISIBLE
-                        binding.recyclerviewEpisodes.visibility = View.GONE
+                        binding.recyclerview.visibility = View.VISIBLE
                     }
-                    is MainState.Episodes -> {
+                    is MainState.Characters -> {
                         binding.progressbar.visibility = View.GONE
-                        binding.recyclerviewEpisodes.visibility = View.VISIBLE
-                        episodesAdapter.updateEpisodeList(state.data)
+                        binding.recyclerview.visibility = View.VISIBLE
+                        charactersAdapter.updateCharacters(state.data)
+
                     }
                     is MainState.Error -> {
                         Toast.makeText(requireContext(), state.errorMessage, Toast.LENGTH_LONG)
@@ -127,19 +97,17 @@ class EpisodeListFragment : Fragment(), ViewBase,
     }
 
     override fun onBackPress() {
-
     }
 
     override fun clickOnItem(item: Any?) {
-        if (item is EpisodesItem) {
-            val intent = Intent(requireContext(), EpisodeDetailActivity::class.java)
-            intent.putExtra(EpisodeDetailActivity.DATA_CONTENT, item)
-            startActivity(intent)
+        if (item is CharactersItem) {
+            Toast.makeText(requireContext(), "Show the detail character screen!", Toast.LENGTH_LONG)
+                .show()
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        episodesAdapter.unRegisterCallbackListener()
+        charactersAdapter.unRegisterCallbackListener()
     }
 }
