@@ -5,13 +5,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.cogtrainingdemo.R
 import com.example.cogtrainingdemo.data.model.CharactersItem
 import com.example.cogtrainingdemo.databinding.ItemListBinding
 import com.example.cogtrainingdemo.ui.listener.CallbackListener
 
 
 class CharactersAdapter : RecyclerView.Adapter<CharactersAdapter.ViewHolder>() {
+    var onItemClick: ((CharactersItem) -> Unit)? = null
     private var characters = listOf<CharactersItem>()
 
     private var callbackListener: CallbackListener? = null
@@ -39,15 +39,18 @@ class CharactersAdapter : RecyclerView.Adapter<CharactersAdapter.ViewHolder>() {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val character = characters[position]
-        holder.itemView.setOnClickListener {
+        /*holder.itemView.setOnClickListener {
             callbackListener?.clickOnItem(character)
-        }
+        }*/
 
         holder.binding.apply {
             characterName.text = character.name
             Glide.with(holder.itemView.context)
                 .load(character.img)
                 .into(holder.binding.characterImage)
+        }
+        holder.itemView.setOnClickListener {
+            onItemClick?.invoke(character)
         }
     }
 

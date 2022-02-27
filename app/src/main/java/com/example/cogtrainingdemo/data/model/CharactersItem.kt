@@ -1,5 +1,7 @@
 package com.example.cogtrainingdemo.data.model
 
+import java.io.Serializable
+
 data class CharactersItem(
     val appearance: List<Int>,
     val better_call_saul_appearance: List<Int>,
@@ -12,4 +14,4 @@ data class CharactersItem(
     val occupation: List<String>,
     val portrayed: String,
     val status: String
-)
+): Serializable
