@@ -5,3 +5,6 @@ const val PREFS_FILE = "prefsFile"
 const val PREFS_CHARACTER_KEY = "prefsCharactersKey"
 const val CHARACTER_DATA = "CHARACTER_DATA"
 
+
+//const val CHARACTER_NAME = "character_name"
+

@@ -22,6 +22,8 @@ import com.example.cogtrainingdemo.ui.viewModel.CharactersViewModel
 import com.example.cogtrainingdemo.ui.views.ui.activities.DetailsScreen
 import kotlinx.coroutines.launch
 
+const val ARTIST_DATA = "ARTIST_DATA"
+
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentArtistsBinding? = null
@@ -46,10 +48,6 @@ class HomeFragment : Fragment() {
         initViewModel()
         observeViewModelStates()
         sendUserIntent()
-       /* val textView: TextView = binding.textHome
-        homeViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }*/
         return root
     }
 

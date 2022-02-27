@@ -1,5 +1,6 @@
 package com.example.cogtrainingdemo.ui.views.ui.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,20 +14,25 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cogtrainingdemo.R
 import com.example.cogtrainingdemo.data.api.CharactersRemoteDataSource
 import com.example.cogtrainingdemo.data.api.RestApi
+import com.example.cogtrainingdemo.data.model.EpisodesItem
 import com.example.cogtrainingdemo.data.repository.CharactersRepository
-import com.example.cogtrainingdemo.databinding.FragmentDashboardBinding
+import com.example.cogtrainingdemo.databinding.FragmentEposideListListBinding
+import com.example.cogtrainingdemo.ui.listener.CallbackListener
 import com.example.cogtrainingdemo.ui.main.intent.MainIntent
 import com.example.cogtrainingdemo.ui.main.viewState.MainState
 import com.example.cogtrainingdemo.ui.viewModel.EpisodesViewModel
 import com.example.cogtrainingdemo.ui.views.EpisodeItemRecyclerViewAdapter
 import com.example.cogtrainingdemo.ui.views.ViewBase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class DashboardFragment: Fragment(), ViewBase {
+const val EPISODE_DATA = "EPISODE_DATA"
+class DashboardFragment: Fragment(), ViewBase,
+CallbackListener {
 
-    private lateinit var binding: FragmentDashboardBinding
+    private lateinit var binding: FragmentEposideListListBinding
     private var characterName: String? = null
-    private val viewModel by viewModels<EpisodesViewModel>()
+    val viewModel by viewModels<EpisodesViewModel>()
     private val service: CharactersRemoteDataSource = RestApi.getRetrofitInstance()
     lateinit var repository: CharactersRepository
     private var episodesAdapter = EpisodeItemRecyclerViewAdapter(
@@ -38,9 +44,9 @@ class DashboardFragment: Fragment(), ViewBase {
         repository = CharactersRepository.getInstance(service)
         viewModel.init(requireContext(), repository)
 
-      /*  arguments?.let {
+        arguments?.let {
             characterName = it.getString(CHARACTER_NAME, "").uppercase()
-        }*/
+        }
         observeViewModelStates()
     }
 
@@ -50,12 +56,12 @@ class DashboardFragment: Fragment(), ViewBase {
     ): View {
 
         // val layout = inflater.inflate(R.layout.fragment_eposide_list_list, container, false)
-        binding = FragmentDashboardBinding.inflate(inflater)
-
-
+        binding = FragmentEposideListListBinding.inflate(inflater)
+        episodesAdapter.registerCallbackListener(this)
         // Set the adapter
         with(binding.recyclerviewEpisodes) {
             LinearLayoutManager(context)
+
             adapter = episodesAdapter
             val mDividerItemDecoration = DividerItemDecoration(
                 this.context,
@@ -78,20 +84,20 @@ class DashboardFragment: Fragment(), ViewBase {
         }
     }
 
-   /* companion object {
+    companion object {
         const val CHARACTER_NAME = "character_name"
 
         @JvmStatic
-        fun newInstance(characterName: String?, callbackListener: CallbackListener) =
-            EpisodeListFragment(callbackListener).apply {
+        fun newInstance(characterName: String?) =
+            DashboardFragment().apply {
                 arguments = Bundle().apply {
                     putString(CHARACTER_NAME, characterName)
                 }
             }
-    }*/
+    }
 
     override fun observeViewModelStates() {
-        lifecycleScope.launch {
+        lifecycleScope.launch(Dispatchers.Main) {
             viewModel.eposidesState.collect { state ->
                 when (state) {
                     is MainState.Idle -> {
@@ -116,4 +122,18 @@ class DashboardFragment: Fragment(), ViewBase {
             }
         }
     }
+
+    override fun onBackPress() {
+
+    }
+
+    override fun clickOnItem(item: Any?) {
+
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        episodesAdapter.unRegisterCallbackListener()
+    }
+
 }
