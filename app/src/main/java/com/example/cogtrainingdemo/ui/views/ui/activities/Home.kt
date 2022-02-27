@@ -11,13 +11,9 @@ import com.example.cogtrainingdemo.R
 import com.example.cogtrainingdemo.databinding.ActivityHomeBinding
 import com.example.cogtrainingdemo.ui.listener.CallbackListener
 import com.example.cogtrainingdemo.ui.views.ViewBase
-import com.example.cogtrainingdemo.ui.views.ui.fragments.ARTIST_DATA
-import com.example.cogtrainingdemo.ui.views.ui.fragments.DashboardFragment
-import com.example.cogtrainingdemo.ui.views.ui.fragments.EPISODE_DATA
-import com.example.cogtrainingdemo.ui.views.ui.fragments.HomeFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class Home : AppCompatActivity() , ViewBase, CallbackListener {
+class Home : AppCompatActivity()  {
 
     private lateinit var binding: ActivityHomeBinding
 
@@ -42,15 +38,4 @@ class Home : AppCompatActivity() , ViewBase, CallbackListener {
 
     }
 
-    override fun onBackPress() {
-        TODO("Not yet implemented")
-    }
-
-    override fun clickOnItem(item: Any?) {
-        TODO("Not yet implemented")
-    }
-
-    override fun observeViewModelStates() {
-        TODO("Not yet implemented")
-    }
 }

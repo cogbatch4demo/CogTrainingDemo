@@ -26,7 +26,6 @@ import com.example.cogtrainingdemo.ui.views.ViewBase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-const val EPISODE_DATA = "EPISODE_DATA"
 class DashboardFragment: Fragment(), ViewBase,
 CallbackListener {
 

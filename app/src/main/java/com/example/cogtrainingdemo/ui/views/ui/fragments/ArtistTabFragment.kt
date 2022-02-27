@@ -22,7 +22,6 @@ import com.example.cogtrainingdemo.ui.viewModel.CharactersViewModel
 import com.example.cogtrainingdemo.ui.views.ui.activities.DetailsScreen
 import kotlinx.coroutines.launch
 
-const val ARTIST_DATA = "ARTIST_DATA"
 
 class HomeFragment : Fragment() {
 
@@ -37,8 +36,7 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-       /* val homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)*/
+
           repository = CharactersRepository.getInstance(service)
 
         _binding = FragmentArtistsBinding.inflate(inflater, container, false)
