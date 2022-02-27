@@ -31,7 +31,7 @@ class EpisodeItemRecyclerViewAdapter(
         )
 
     }
-    
+
     fun registerCallbackListener(callbackListener: CallbackListener) {
         this.callbackListener = callbackListener
     }

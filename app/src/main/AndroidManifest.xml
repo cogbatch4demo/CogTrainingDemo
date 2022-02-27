@@ -12,19 +12,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CogTrainingDemo">
         <activity
-            android:name=".ui.views.EpisodeDetailActivity"
-            android:exported="false"
-            android:label="@string/title_activity_episode_detail"
-            android:theme="@style/Theme.CogTrainingDemo.NoActionBar" />
-        <activity
-            android:name=".MainActivity"
-            android:exported="true">
+            android:name=".ui.views.ui.activities.Home"
+            android:exported="true"
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".ui.views.ui.activities.DetailsScreen" />
     </application>
 
 </manifest>

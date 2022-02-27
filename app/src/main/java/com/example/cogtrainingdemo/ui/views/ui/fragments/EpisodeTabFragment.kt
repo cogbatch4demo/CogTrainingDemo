@@ -1,4 +1,4 @@
-package com.example.cogtrainingdemo.ui.views
+package com.example.cogtrainingdemo.ui.views.ui.fragments
 
 import android.content.Intent
 import android.os.Bundle
@@ -21,20 +21,17 @@ import com.example.cogtrainingdemo.ui.listener.CallbackListener
 import com.example.cogtrainingdemo.ui.main.intent.MainIntent
 import com.example.cogtrainingdemo.ui.main.viewState.MainState
 import com.example.cogtrainingdemo.ui.viewModel.EpisodesViewModel
+import com.example.cogtrainingdemo.ui.views.EpisodeItemRecyclerViewAdapter
+import com.example.cogtrainingdemo.ui.views.ViewBase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-
-/**
- * A fragment representing a list of Items.
- */
-const val EposideListFragment_TAG = "EposideListFragment"
-
-class EpisodeListFragment(private val callbackListener: CallbackListener) : Fragment(), ViewBase,
-    CallbackListener {
+class DashboardFragment: Fragment(), ViewBase,
+CallbackListener {
 
     private lateinit var binding: FragmentEposideListListBinding
     private var characterName: String? = null
-    override val viewModel by viewModels<EpisodesViewModel>()
+    val viewModel by viewModels<EpisodesViewModel>()
     private val service: CharactersRemoteDataSource = RestApi.getRetrofitInstance()
     lateinit var repository: CharactersRepository
     private var episodesAdapter = EpisodeItemRecyclerViewAdapter(
@@ -59,10 +56,6 @@ class EpisodeListFragment(private val callbackListener: CallbackListener) : Frag
 
         // val layout = inflater.inflate(R.layout.fragment_eposide_list_list, container, false)
         binding = FragmentEposideListListBinding.inflate(inflater)
-
-        binding.backBtn.setOnClickListener {
-            callbackListener.onBackPress()
-        }
         episodesAdapter.registerCallbackListener(this)
         // Set the adapter
         with(binding.recyclerviewEpisodes) {
@@ -94,8 +87,8 @@ class EpisodeListFragment(private val callbackListener: CallbackListener) : Frag
         const val CHARACTER_NAME = "character_name"
 
         @JvmStatic
-        fun newInstance(characterName: String?, callbackListener: CallbackListener) =
-            EpisodeListFragment(callbackListener).apply {
+        fun newInstance(characterName: String?) =
+            DashboardFragment().apply {
                 arguments = Bundle().apply {
                     putString(CHARACTER_NAME, characterName)
                 }
@@ -103,7 +96,7 @@ class EpisodeListFragment(private val callbackListener: CallbackListener) : Frag
     }
 
     override fun observeViewModelStates() {
-        lifecycleScope.launch {
+        lifecycleScope.launch(Dispatchers.Main) {
             viewModel.eposidesState.collect { state ->
                 when (state) {
                     is MainState.Idle -> {
@@ -134,15 +127,12 @@ class EpisodeListFragment(private val callbackListener: CallbackListener) : Frag
     }
 
     override fun clickOnItem(item: Any?) {
-        if (item is EpisodesItem) {
-            val intent = Intent(requireContext(), EpisodeDetailActivity::class.java)
-            intent.putExtra(EpisodeDetailActivity.DATA_CONTENT, item)
-            startActivity(intent)
-        }
+
     }
 
     override fun onDestroy() {
         super.onDestroy()
         episodesAdapter.unRegisterCallbackListener()
     }
+
 }

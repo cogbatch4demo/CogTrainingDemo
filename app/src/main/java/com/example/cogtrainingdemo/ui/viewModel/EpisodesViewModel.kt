@@ -1,6 +1,7 @@
 package com.example.cogtrainingdemo.ui.viewModel
 
 import android.content.Context
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.cogtrainingdemo.data.local.database.EpisodesDatabase
 import com.example.cogtrainingdemo.data.repository.CharactersRepository
@@ -13,10 +14,16 @@ import kotlinx.coroutines.withContext
 
 class EpisodesViewModel : ViewModelBase() {
     private lateinit var repositoryDB: EpisodesDatabase
+    val selected = MutableLiveData<String>()
     fun init(context: Context, repository: CharactersRepository) {
         this.repositoryDB = EpisodesDatabase.getInstance(context)
         this.repository = repository
         handleIntent(context)
+    }
+
+    fun selectedItem(item: String)
+    {
+        selected.value= item
     }
 
     override fun handleIntent(context: Context) {
@@ -60,9 +67,9 @@ class EpisodesViewModel : ViewModelBase() {
                         .findEpisodesCharacterName(characterName).let { episodeItemList ->
                             _eposidesState.value = MainState.Episodes(episodeItemList)
                         }
-                } ?: withContext(kotlinx.coroutines.Dispatchers.Main) {
+                } ?: withContext(Dispatchers.Main) {
                     _eposidesState.value =
-                        com.example.cogtrainingdemo.ui.main.viewState.MainState.Episodes(kotlin.collections.listOf())
+                        MainState.Episodes(listOf())
                 }
             }
         }
