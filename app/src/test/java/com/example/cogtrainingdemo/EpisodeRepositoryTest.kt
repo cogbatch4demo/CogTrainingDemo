@@ -1,27 +1,20 @@
 package com.example.cogtrainingdemo
 
+
 import com.example.cogtrainingdemo.data.api.CharactersRemoteDataSource
-import com.example.cogtrainingdemo.data.model.CharactersItem
 import com.example.cogtrainingdemo.data.model.EpisodesItem
 import com.example.cogtrainingdemo.data.repository.CharactersRepository
-import io.mockk.MockKAnnotations
-import io.mockk.mockk
-import io.mockk.unmockkAll
-import io.mockk.coEvery
-import io.mockk.coVerify
+import io.mockk.*
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.setMain
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-
+import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.jupiter.api.Test
-
-
 import retrofit2.Response
 
 @ExperimentalCoroutinesApi
@@ -51,7 +44,7 @@ class EpisodeRepositoryTest {
 
     @ExperimentalCoroutinesApi
     @Test
-    fun `test - invoke all episodes` () {
+    fun `test - invoke all episodes`() {
         runTest {
             val response = mockk<Response<List<EpisodesItem>>>()
             coEvery { charactersRemoteDataSource.getAllEpisodes() } returns response
