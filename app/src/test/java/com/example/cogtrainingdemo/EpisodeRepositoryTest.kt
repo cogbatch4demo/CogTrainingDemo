@@ -51,7 +51,7 @@ class EpisodeRepositoryTest {
 
     @ExperimentalCoroutinesApi
     @Test
-    fun `test - invoke all characters` () {
+    fun `test - invoke all episodes` () {
         runTest {
             val response = mockk<Response<List<EpisodesItem>>>()
             coEvery { charactersRemoteDataSource.getAllEpisodes() } returns response

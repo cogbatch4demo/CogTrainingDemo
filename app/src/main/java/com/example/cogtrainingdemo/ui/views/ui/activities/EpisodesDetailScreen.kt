@@ -40,7 +40,7 @@ class EpisodesDetailScreen : AppCompatActivity() {
                 season.text = it.season
                 airDate.text = it.air_date
                 series.text = it.series
-                espisode.text = it.episode
+                espisode.text = ""+it.episode_id
             }
             setCharactersList(it)
         }
