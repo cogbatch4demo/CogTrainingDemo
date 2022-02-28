@@ -1,4 +1,4 @@
-package com.example.cogtrainingdemo.ui.views
+package com.example.cogtrainingdemo.ui.views.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

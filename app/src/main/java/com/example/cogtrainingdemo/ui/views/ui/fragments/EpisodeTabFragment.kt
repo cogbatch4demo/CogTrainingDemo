@@ -20,20 +20,25 @@ import com.example.cogtrainingdemo.ui.listener.CallbackListener
 import com.example.cogtrainingdemo.ui.main.intent.MainIntent
 import com.example.cogtrainingdemo.ui.main.viewState.MainState
 import com.example.cogtrainingdemo.ui.viewModel.EpisodesViewModel
-import com.example.cogtrainingdemo.ui.views.EpisodeItemRecyclerViewAdapter
 import com.example.cogtrainingdemo.ui.views.FragmentBaseView
+import com.example.cogtrainingdemo.ui.views.RxSearchEpisodeObservable
 import com.example.cogtrainingdemo.ui.views.ui.activities.EpisodesDetailScreen
+import com.example.cogtrainingdemo.ui.views.ui.adapters.EpisodeItemRecyclerViewAdapter
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 
 class DashboardFragment : FragmentBaseView(),
     CallbackListener {
 
     private lateinit var binding: FragmentEposideListListBinding
-    private var characterName: String? = null
     private val service: CharactersRemoteDataSource = RestApi.getRetrofitInstance()
     lateinit var repository: CharactersRepository
     override val viewModel by viewModels<EpisodesViewModel>()
+    private var disposable: Disposable? = null
     private var episodesAdapter = EpisodeItemRecyclerViewAdapter(
         listOf()
     )
@@ -42,10 +47,6 @@ class DashboardFragment : FragmentBaseView(),
         super.onCreate(savedInstanceState)
         repository = CharactersRepository.getInstance(service)
         viewModel.init(requireContext(), repository)
-
-        arguments?.let {
-            characterName = it.getString(CHARACTER_NAME, "").uppercase()
-        }
         observeViewModelStates()
     }
 
@@ -68,30 +69,31 @@ class DashboardFragment : FragmentBaseView(),
             this.context.resources.getDrawable(R.drawable.divider)
                 ?.let { mDividerItemDecoration.setDrawable(it) }
             addItemDecoration(mDividerItemDecoration)
-            sendUserIntent()
+            sendUserIntent(null)
         }
+        searchEpisodeWithCharacterName()
         return binding.root
     }
 
-    private fun sendUserIntent() {
+    private fun searchEpisodeWithCharacterName() {
+        disposable = RxSearchEpisodeObservable.fromView(binding.searchView)
+            .debounce(1000, TimeUnit.MILLISECONDS)
+            .map { text -> text.lowercase().trim() }
+            .distinctUntilChanged()
+            .switchMap { s -> Observable.just(s) }
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { query ->
+                sendUserIntent(query)
+            }
+    }
+
+    private fun sendUserIntent(characterName: String?) {
         lifecycleScope.launch {
             if (characterName.isNullOrBlank())
                 viewModel.userIntent.send(MainIntent.FetchEpisodes)
             else
                 viewModel.userIntent.send(MainIntent.GetEpisodesWithCharacter(characterName))
         }
-    }
-
-    companion object {
-        const val CHARACTER_NAME = "character_name"
-
-        @JvmStatic
-        fun newInstance(characterName: String?) =
-            DashboardFragment().apply {
-                arguments = Bundle().apply {
-                    putString(CHARACTER_NAME, characterName)
-                }
-            }
     }
 
     override fun observeViewModelStates() {
@@ -132,6 +134,8 @@ class DashboardFragment : FragmentBaseView(),
     override fun onDestroy() {
         super.onDestroy()
         episodesAdapter.unRegisterCallbackListener()
+        if (disposable?.isDisposed == false)
+            disposable?.dispose()
     }
 
 }

@@ -8,7 +8,6 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,7 +16,7 @@ import com.example.cogtrainingdemo.data.api.CharactersRemoteDataSource
 import com.example.cogtrainingdemo.data.api.RestApi
 import com.example.cogtrainingdemo.data.repository.CharactersRepository
 import com.example.cogtrainingdemo.databinding.FragmentArtistsBinding
-import com.example.cogtrainingdemo.ui.main.CharactersAdapter
+import com.example.cogtrainingdemo.ui.views.ui.adapters.CharactersAdapter
 import com.example.cogtrainingdemo.ui.main.intent.MainIntent
 import com.example.cogtrainingdemo.ui.main.viewState.MainState
 import com.example.cogtrainingdemo.ui.viewModel.CharactersViewModel
@@ -52,7 +51,6 @@ class HomeFragment : FragmentBaseView() {
     }
 
     private fun setUpAdapter() {
-
         binding.recyclerview.adapter = adapter
         binding.recyclerview.layoutManager = LinearLayoutManager(activity)
         adapter.onItemClick = { character ->

@@ -11,7 +11,7 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
-import com.example.cogtrainingdemo.ui.main.CharactersAdapter
+import com.example.cogtrainingdemo.ui.views.ui.adapters.CharactersAdapter
 import com.example.cogtrainingdemo.ui.views.ui.fragments.HomeFragment
 import org.junit.Before
 import org.junit.Test

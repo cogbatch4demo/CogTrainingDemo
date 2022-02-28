@@ -29,5 +29,6 @@
     <string name="air_date">Air date:</string>
     <string name="characters">Characters:</string>
     <string name="episode">Episode:</string>
+    <string name="search_hint">Enter character name</string>
 
 </resources>
