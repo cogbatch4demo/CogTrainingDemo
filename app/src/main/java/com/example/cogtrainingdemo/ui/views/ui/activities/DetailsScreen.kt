@@ -33,6 +33,7 @@ class DetailsScreen : AppCompatActivity() {
             .centerInside()
             .into(detailsScreenBinding.itemImage)
 
+
     }
 
     override fun onSupportNavigateUp(): Boolean {

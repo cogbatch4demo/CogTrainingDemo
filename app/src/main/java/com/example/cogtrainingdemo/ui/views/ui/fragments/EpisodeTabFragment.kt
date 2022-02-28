@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,20 +21,22 @@ import com.example.cogtrainingdemo.databinding.FragmentEposideListListBinding
 import com.example.cogtrainingdemo.ui.listener.CallbackListener
 import com.example.cogtrainingdemo.ui.main.intent.MainIntent
 import com.example.cogtrainingdemo.ui.main.viewState.MainState
+import com.example.cogtrainingdemo.ui.viewModel.CharactersViewModel
 import com.example.cogtrainingdemo.ui.viewModel.EpisodesViewModel
 import com.example.cogtrainingdemo.ui.views.EpisodeItemRecyclerViewAdapter
 import com.example.cogtrainingdemo.ui.views.ViewBase
+import com.example.cogtrainingdemo.ui.views.ui.activities.EpisodesDetailScreen
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class DashboardFragment: Fragment(), ViewBase,
-CallbackListener {
+class DashboardFragment : Fragment(), ViewBase,
+    CallbackListener {
 
     private lateinit var binding: FragmentEposideListListBinding
     private var characterName: String? = null
-    val viewModel by viewModels<EpisodesViewModel>()
     private val service: CharactersRemoteDataSource = RestApi.getRetrofitInstance()
     lateinit var repository: CharactersRepository
+    override val viewModel by viewModels<EpisodesViewModel>()
     private var episodesAdapter = EpisodeItemRecyclerViewAdapter(
         listOf()
     )
@@ -54,7 +57,6 @@ CallbackListener {
         savedInstanceState: Bundle?
     ): View {
 
-        // val layout = inflater.inflate(R.layout.fragment_eposide_list_list, container, false)
         binding = FragmentEposideListListBinding.inflate(inflater)
         episodesAdapter.registerCallbackListener(this)
         // Set the adapter
@@ -97,7 +99,7 @@ CallbackListener {
 
     override fun observeViewModelStates() {
         lifecycleScope.launch(Dispatchers.Main) {
-            viewModel.eposidesState.collect { state ->
+            viewModel.viewState.collect { state ->
                 when (state) {
                     is MainState.Idle -> {
                     }
@@ -122,12 +124,12 @@ CallbackListener {
         }
     }
 
-    override fun onBackPress() {
-
-    }
-
     override fun clickOnItem(item: Any?) {
-
+        if (item is EpisodesItem) {
+            val intent = Intent(requireContext(), EpisodesDetailScreen::class.java)
+            intent.putExtra(EpisodesDetailScreen.DATA_CONTENT, item)
+            startActivity(intent)
+        }
     }
 
     override fun onDestroy() {

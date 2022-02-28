@@ -15,9 +15,6 @@ import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
 
 class CharactersViewModel : ViewModelBase() {
-    private val _charactersState = MutableStateFlow<MainState>(MainState.Idle)
-    val charactersState: StateFlow<MainState> = _charactersState
-
     fun init(context: Context, repository: CharactersRepository) {
         this.repository = repository
         handleIntent(context)
@@ -27,9 +24,9 @@ class CharactersViewModel : ViewModelBase() {
 
         viewModelScope.launch {
             if (LocalRepo.hasCharacters(context)) {
-                _charactersState.value = MainState.Characters(LocalRepo.getCharacters(context))
+                _viewState.value = MainState.Characters(LocalRepo.getCharacters(context))
             } else {
-                _charactersState.value = MainState.Loading
+                _viewState.value = MainState.Loading
                 val responseData = repository.getAllCharacters()
 
                 LocalRepo.setCharacters(
@@ -37,7 +34,7 @@ class CharactersViewModel : ViewModelBase() {
                     requireNotNull(responseData.data)
                 )
 
-                _charactersState.value = try {
+                _viewState.value = try {
                     MainState.Characters(requireNotNull(responseData.data))
                 } catch (e: Exception) {
                     MainState.Error(e.localizedMessage)

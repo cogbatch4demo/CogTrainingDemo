@@ -19,14 +19,15 @@ import com.example.cogtrainingdemo.ui.main.CharactersAdapter
 import com.example.cogtrainingdemo.ui.main.intent.MainIntent
 import com.example.cogtrainingdemo.ui.main.viewState.MainState
 import com.example.cogtrainingdemo.ui.viewModel.CharactersViewModel
+import com.example.cogtrainingdemo.ui.views.ViewBase
 import com.example.cogtrainingdemo.ui.views.ui.activities.DetailsScreen
 import kotlinx.coroutines.launch
 
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), ViewBase {
 
     private var _binding: FragmentArtistsBinding? = null
-    private val viewModel by viewModels<CharactersViewModel>()
+    override val viewModel by viewModels<CharactersViewModel>()
     private val adapter = CharactersAdapter()
     private val binding get() = _binding!!
     lateinit var repository: CharactersRepository
@@ -37,7 +38,7 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-          repository = CharactersRepository.getInstance(service)
+        repository = CharactersRepository.getInstance(service)
 
         _binding = FragmentArtistsBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -53,18 +54,18 @@ class HomeFragment : Fragment() {
 
         binding.recyclerview.adapter = adapter
         binding.recyclerview.layoutManager = LinearLayoutManager(activity)
-        adapter.onItemClick = {character ->
+        adapter.onItemClick = { character ->
             val bundle = Bundle()
-            bundle.putSerializable(CHARACTER_DATA,character)
+            bundle.putSerializable(CHARACTER_DATA, character)
             val intent = Intent(requireContext(), DetailsScreen::class.java)
             intent.putExtras(bundle)
             startActivity(intent)
         }
     }
 
-    fun observeViewModelStates() {
+    override fun observeViewModelStates() {
         lifecycleScope.launch {
-            viewModel.charactersState.collect { state ->
+            viewModel.viewState.collect { state ->
 
                 when (state) {
                     is MainState.Idle -> {
@@ -88,6 +89,7 @@ class HomeFragment : Fragment() {
             }
         }
     }
+
     private fun sendUserIntent() {
         lifecycleScope.launch {
             viewModel.userIntent.send(MainIntent.FetchUser)

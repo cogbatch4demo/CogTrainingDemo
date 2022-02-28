@@ -21,9 +21,8 @@ class EpisodesViewModel : ViewModelBase() {
         handleIntent(context)
     }
 
-    fun selectedItem(item: String)
-    {
-        selected.value= item
+    fun selectedItem(item: String) {
+        selected.value = item
     }
 
     override fun handleIntent(context: Context) {
@@ -42,7 +41,7 @@ class EpisodesViewModel : ViewModelBase() {
         viewModelScope.launch(Dispatchers.IO) {
             val list = repositoryDB.episodesDao().getEpisodesList()
             if (list.isNullOrEmpty()) {
-                _eposidesState.value = MainState.Loading
+                _viewState.value = MainState.Loading
                 val responseData = repository.getAllEpisodes()
                 if (!responseData.data.isNullOrEmpty()) {
                     responseData.data.forEach {
@@ -54,21 +53,21 @@ class EpisodesViewModel : ViewModelBase() {
                         // query with character name
                         repositoryDB.episodesDao()
                             .findEpisodesCharacterName(characterName).let { episodeItemList ->
-                                _eposidesState.value = MainState.Episodes(episodeItemList)
+                                _viewState.value = MainState.Episodes(episodeItemList)
                             }
                     }
                 } else {
-                    _eposidesState.value = MainState.Episodes(listOf())
+                    _viewState.value = MainState.Episodes(listOf())
                 }
 
             } else {
                 characterName?.let {
                     repositoryDB.episodesDao()
                         .findEpisodesCharacterName(characterName).let { episodeItemList ->
-                            _eposidesState.value = MainState.Episodes(episodeItemList)
+                            _viewState.value = MainState.Episodes(episodeItemList)
                         }
                 } ?: withContext(Dispatchers.Main) {
-                    _eposidesState.value =
+                    _viewState.value =
                         MainState.Episodes(listOf())
                 }
             }
@@ -78,7 +77,7 @@ class EpisodesViewModel : ViewModelBase() {
     private fun fetchEposides(context: Context) {
         viewModelScope.launch(Dispatchers.IO) {
             if (repositoryDB.episodesDao().getEpisodesList().isNullOrEmpty()) {
-                _eposidesState.value = MainState.Loading
+                _viewState.value = MainState.Loading
                 val responseData = repository.getAllEpisodes()
                 if (!responseData.data.isNullOrEmpty())
                     responseData.data.forEach {
@@ -86,13 +85,13 @@ class EpisodesViewModel : ViewModelBase() {
                             .insertEpisodesItem(it)
                     }
 
-                _eposidesState.value = try {
+                _viewState.value = try {
                     MainState.Episodes(requireNotNull(responseData.data))
                 } catch (e: Exception) {
                     MainState.Error(e.localizedMessage)
                 }
             } else {
-                _eposidesState.value =
+                _viewState.value =
                     MainState.Episodes(
                         requireNotNull(
                             repositoryDB.episodesDao().getEpisodesList()

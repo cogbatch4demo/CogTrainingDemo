@@ -2,18 +2,15 @@ package com.example.cogtrainingdemo.ui.views.ui.activities
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.cogtrainingdemo.R
 import com.example.cogtrainingdemo.databinding.ActivityHomeBinding
-import com.example.cogtrainingdemo.ui.listener.CallbackListener
-import com.example.cogtrainingdemo.ui.views.ViewBase
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class Home : AppCompatActivity()  {
+class Home : AppCompatActivity() {
 
     private lateinit var binding: ActivityHomeBinding
 
