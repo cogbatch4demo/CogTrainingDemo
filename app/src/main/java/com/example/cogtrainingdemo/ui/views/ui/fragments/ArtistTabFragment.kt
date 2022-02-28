@@ -4,6 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -26,10 +28,9 @@ import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment(), ViewBase {
 
-    private var _binding: FragmentArtistsBinding? = null
+    private lateinit var binding: FragmentArtistsBinding
     override val viewModel by viewModels<CharactersViewModel>()
     private val adapter = CharactersAdapter()
-    private val binding get() = _binding!!
     lateinit var repository: CharactersRepository
     private val service: CharactersRemoteDataSource = RestApi.getRetrofitInstance()
     override fun onCreateView(
@@ -40,7 +41,7 @@ class HomeFragment : Fragment(), ViewBase {
 
         repository = CharactersRepository.getInstance(service)
 
-        _binding = FragmentArtistsBinding.inflate(inflater, container, false)
+        binding = FragmentArtistsBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         setUpAdapter()
@@ -72,11 +73,12 @@ class HomeFragment : Fragment(), ViewBase {
 
                     }
                     is MainState.Loading -> {
-//                        binding.progressBar.visibility = View.VISIBLE
+                        binding.spinner.visibility = VISIBLE
+                        binding.recyclerview.visibility = GONE
                     }
                     is MainState.Characters -> {
-//                        binding.progressBar.visibility = View.GONE
-//                        binding.recyclerview.visibility = View.VISIBLE
+                        binding.spinner.visibility = GONE
+                        binding.recyclerview.visibility = VISIBLE
                         adapter.updateCharacters(state.data)
                     }
                     is MainState.Error -> {
@@ -84,6 +86,7 @@ class HomeFragment : Fragment(), ViewBase {
                             .show()
                     }
 
+                    else -> Unit
                 }
 
             }
@@ -100,8 +103,4 @@ class HomeFragment : Fragment(), ViewBase {
         context?.let { viewModel.init(it, repository) }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
 }

@@ -8,8 +8,8 @@ import com.example.cogtrainingdemo.databinding.ActivityDetailsScreenBinding
 
 class DetailsScreen : AppCompatActivity() {
 
-   lateinit var detailsScreenBinding: ActivityDetailsScreenBinding
-    private  var characterData: CharactersItem ?  = null
+    lateinit var detailsScreenBinding: ActivityDetailsScreenBinding
+    private var characterData: CharactersItem? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

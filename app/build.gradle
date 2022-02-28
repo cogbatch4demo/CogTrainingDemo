@@ -70,6 +70,8 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleViewModelVersion"
     implementation "com.github.bumptech.glide:glide:$glideVersion"
     annotationProcessor "com.github.bumptech.glide:compiler:$glideVersion"
+    debugImplementation "androidx.fragment:fragment-testing:$fragment_version"
+
 
     //retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
@@ -84,6 +86,13 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-core:$espressoCoreVersion"
     androidTestImplementation "androidx.test:runner:1.4.0"
     androidTestImplementation "androidx.test:rules:1.4.0"
+
+    //espresso
+    androidTestImplementation( "androidx.test.espresso:espresso-contrib:3.4.0")
+    androidTestImplementation( "androidx.test.espresso:espresso-intents:3.4.0")
+    androidTestImplementation( "androidx.test.espresso:espresso-accessibility:3.4.0")
+    androidTestImplementation( "androidx.test.espresso:espresso-web:3.4.0")
+    androidTestImplementation( "androidx.test.espresso.idling:idling-concurrent:3.4.0")
 
     //Dagger Hilt
     implementation "com.google.dagger:hilt-android:$hiltVersion"
