@@ -25,8 +25,8 @@ import com.example.cogtrainingdemo.ui.views.RxSearchEpisodeObservable
 import com.example.cogtrainingdemo.ui.views.ui.activities.EpisodesDetailScreen
 import com.example.cogtrainingdemo.ui.views.ui.adapters.EpisodeItemRecyclerViewAdapter
 import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
@@ -71,17 +71,23 @@ class DashboardFragment : FragmentBaseView(),
             addItemDecoration(mDividerItemDecoration)
             sendUserIntent(null)
         }
-        searchEpisodeWithCharacterName()
+        binding.searchView.setOnQueryTextFocusChangeListener{ view, isFocus ->
+            if (isFocus) searchEpisodeWithCharacterName()
+        }
         return binding.root
     }
 
     private fun searchEpisodeWithCharacterName() {
         disposable = RxSearchEpisodeObservable.fromView(binding.searchView)
             .debounce(1000, TimeUnit.MILLISECONDS)
-            .map { text -> text.lowercase().trim() }
+            .map { text ->
+                text.lowercase().trim()
+            }
             .distinctUntilChanged()
-            .switchMap { s -> Observable.just(s) }
-            .observeOn(AndroidSchedulers.mainThread())
+            .switchMap { s ->
+                Observable.just(s)
+            }
+            .observeOn(Schedulers.io())
             .subscribe { query ->
                 sendUserIntent(query)
             }
