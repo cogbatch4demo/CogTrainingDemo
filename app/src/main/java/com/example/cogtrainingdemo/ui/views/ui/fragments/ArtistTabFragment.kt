@@ -21,12 +21,12 @@ import com.example.cogtrainingdemo.ui.main.CharactersAdapter
 import com.example.cogtrainingdemo.ui.main.intent.MainIntent
 import com.example.cogtrainingdemo.ui.main.viewState.MainState
 import com.example.cogtrainingdemo.ui.viewModel.CharactersViewModel
-import com.example.cogtrainingdemo.ui.views.ViewBase
+import com.example.cogtrainingdemo.ui.views.FragmentBaseView
 import com.example.cogtrainingdemo.ui.views.ui.activities.DetailsScreen
 import kotlinx.coroutines.launch
 
 
-class HomeFragment : Fragment(), ViewBase {
+class HomeFragment : FragmentBaseView() {
 
     private lateinit var binding: FragmentArtistsBinding
     override val viewModel by viewModels<CharactersViewModel>()

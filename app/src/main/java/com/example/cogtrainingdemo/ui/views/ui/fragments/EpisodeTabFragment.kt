@@ -6,9 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,15 +19,14 @@ import com.example.cogtrainingdemo.databinding.FragmentEposideListListBinding
 import com.example.cogtrainingdemo.ui.listener.CallbackListener
 import com.example.cogtrainingdemo.ui.main.intent.MainIntent
 import com.example.cogtrainingdemo.ui.main.viewState.MainState
-import com.example.cogtrainingdemo.ui.viewModel.CharactersViewModel
 import com.example.cogtrainingdemo.ui.viewModel.EpisodesViewModel
 import com.example.cogtrainingdemo.ui.views.EpisodeItemRecyclerViewAdapter
-import com.example.cogtrainingdemo.ui.views.ViewBase
+import com.example.cogtrainingdemo.ui.views.FragmentBaseView
 import com.example.cogtrainingdemo.ui.views.ui.activities.EpisodesDetailScreen
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class DashboardFragment : Fragment(), ViewBase,
+class DashboardFragment : FragmentBaseView(),
     CallbackListener {
 
     private lateinit var binding: FragmentEposideListListBinding
