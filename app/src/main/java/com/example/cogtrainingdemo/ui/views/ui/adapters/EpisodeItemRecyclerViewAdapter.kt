@@ -1,5 +1,6 @@
 package com.example.cogtrainingdemo.ui.views.ui.adapters
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
@@ -11,7 +12,6 @@ import com.example.cogtrainingdemo.ui.listener.CallbackListener
 
 /**
  * [RecyclerView.Adapter] that can display a [PlaceholderItem].
- * TODO: Replace the implementation with code for your data type.
  */
 class EpisodeItemRecyclerViewAdapter(
     private var values: List<EpisodesItem>
@@ -55,6 +55,7 @@ class EpisodeItemRecyclerViewAdapter(
     }
 
     override fun getItemCount(): Int = values.size
+    @SuppressLint("NotifyDataSetChanged")
     fun updateEpisodeList(data: List<EpisodesItem>) {
         values = data
         notifyDataSetChanged()

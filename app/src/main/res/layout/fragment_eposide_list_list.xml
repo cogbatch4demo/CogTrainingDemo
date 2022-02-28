@@ -11,7 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/grey_200"
-        android:autofillHints="Enter Character Name"
         android:id="@+id/searchView"/>
 
     <androidx.recyclerview.widget.RecyclerView
