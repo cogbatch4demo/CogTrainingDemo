@@ -23,8 +23,8 @@ class DetailsScreen : AppCompatActivity() {
         characterData = intent.getSerializableExtra("CHARACTER_DATA") as CharactersItem?
         detailsScreenBinding.title.text = characterData?.name.toString()
         detailsScreenBinding.dob.text = characterData?.birthday.toString()
-        detailsScreenBinding.potrayedDesc.text = characterData?.portrayed
-        detailsScreenBinding.categoryDesc.text = characterData?.category
+        detailsScreenBinding.potrayedDesc.text = " : "+characterData?.portrayed
+        detailsScreenBinding.categoryDesc.text = ": "+characterData?.category
 
 
         Glide.with(this@DetailsScreen)

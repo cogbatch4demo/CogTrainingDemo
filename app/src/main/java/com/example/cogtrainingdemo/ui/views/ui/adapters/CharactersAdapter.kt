@@ -30,8 +30,13 @@ class CharactersAdapter : RecyclerView.Adapter<CharactersAdapter.ViewHolder>() {
         val character = characters[position]
         holder.binding.apply {
             characterName.text = character.name
+            status.text = character.status
             Glide.with(holder.itemView.context)
                 .load(character.img)
+                .override(100, 100)
+                .centerInside()
+                .fitCenter()
+
                 .into(holder.binding.characterImage)
         }
         holder.itemView.setOnClickListener {

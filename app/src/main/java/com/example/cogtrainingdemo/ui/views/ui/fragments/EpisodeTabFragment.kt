@@ -62,13 +62,13 @@ class DashboardFragment : FragmentBaseView(),
             LinearLayoutManager(context)
 
             adapter = episodesAdapter
-            val mDividerItemDecoration = DividerItemDecoration(
+            /*val mDividerItemDecoration = DividerItemDecoration(
                 this.context,
                 DividerItemDecoration.VERTICAL
             )
             this.context.resources.getDrawable(R.drawable.divider)
                 ?.let { mDividerItemDecoration.setDrawable(it) }
-            addItemDecoration(mDividerItemDecoration)
+            addItemDecoration(mDividerItemDecoration)*/
             sendUserIntent(null)
         }
         binding.searchView.setOnQueryTextFocusChangeListener{ view, isFocus ->

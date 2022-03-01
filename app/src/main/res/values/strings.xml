@@ -12,8 +12,8 @@
     <string name="title_artists">Artists</string>
     <string name="title_episodes">Episodes</string>
     <string name="title_notifications">Notifications</string>
-    <string name="potrayed_by">Potrayed By :</string>
-    <string name="category">Category :</string>
+    <string name="potrayed_by">Potrayed </string>
+    <string name="category">Category </string>
     <string name="title_activity_episode_detail">EpisodeDetailActivity</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
@@ -23,12 +23,12 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-    <string name="title">Title:</string>
-    <string name="series">Series:</string>
-    <string name="season">Season:</string>
-    <string name="air_date">Air date:</string>
-    <string name="characters">Characters:</string>
-    <string name="episode">Episode:</string>
+    <string name="title">Title</string>
+    <string name="series">Series</string>
+    <string name="season">Season</string>
+    <string name="air_date">Air date</string>
+    <string name="characters">Characters</string>
+    <string name="episode">Episode</string>
     <string name="search_hint">Enter character name</string>
 
 </resources>

@@ -5,6 +5,7 @@ import android.view.Gravity
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.example.cogtrainingdemo.R
 import com.example.cogtrainingdemo.data.model.EpisodesItem
 import com.example.cogtrainingdemo.databinding.ActivityEpisodeDetailBinding
 
@@ -36,11 +37,11 @@ class EpisodesDetailScreen : AppCompatActivity() {
     private fun showDataOnScreen() {
         episodeDetailItem?.let {
             with(detailsScreenBinding.detail) {
-                title.text = it.title
-                season.text = it.season
-                airDate.text = it.air_date
-                series.text = it.series
-                espisode.text = ""+it.episode_id
+                title.text = ": "+it.title
+                season.text = ": "+it.season
+                airDate.text = ": "+it.air_date
+                series.text = ": "+it.series
+                espisode.text = ": "+it.episode_id
             }
             setCharactersList(it)
         }
@@ -54,7 +55,7 @@ class EpisodesDetailScreen : AppCompatActivity() {
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
             textview.gravity = Gravity.CENTER_HORIZONTAL
-            textview.setTextColor(resources.getColor(android.R.color.holo_blue_dark))
+            textview.setTextColor(resources.getColor(R.color.purple_500))
             textview.textSize = 18.0F
             textview.text = it
             detailsScreenBinding.detail.list.addView(textview)
