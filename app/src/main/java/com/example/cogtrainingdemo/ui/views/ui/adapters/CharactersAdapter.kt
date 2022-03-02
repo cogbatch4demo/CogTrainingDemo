@@ -36,9 +36,10 @@ class CharactersAdapter : RecyclerView.Adapter<CharactersAdapter.ViewHolder>() {
                 .override(100, 100)
                 .centerInside()
                 .fitCenter()
-
                 .into(holder.binding.characterImage)
+
         }
+
         holder.itemView.setOnClickListener {
             onItemClick?.invoke(character)
         }

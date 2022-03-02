@@ -10,10 +10,12 @@
     <string name="add_favourites">Add to favourites</string>
     <string name="title_activity_home">Home</string>
     <string name="title_artists">Artists</string>
+    <string name="title_artist">Artist</string>
     <string name="title_episodes">Episodes</string>
     <string name="title_notifications">Notifications</string>
     <string name="potrayed_by">Potrayed </string>
     <string name="category">Category </string>
+    <string name="moreinfo">view info</string>
     <string name="title_activity_episode_detail">EpisodeDetailActivity</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
